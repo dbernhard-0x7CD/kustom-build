@@ -1,9 +1,9 @@
 # Maintainer: David Bernhard <dbernhard@ethz.ch>
 pkgbase=linux-kb
 pkgver=6.2.12
-pkgrel=1
 pkgdesc="Custom kernel build (kustom build)"
-kustom_build_id=100
+kustom_build_id=101
+pkgrel="$kustom_build_id"
 linux_vername="linux-$pkgver"
 module_name=$pkgver-$(echo $pkgbase | cut -d "-" -f 2-)
 extraversion=$(echo $pkgbase | cut -d "-" -f 2-)
