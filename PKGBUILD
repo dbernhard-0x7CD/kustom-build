@@ -74,7 +74,7 @@ prepare() {
       echo "$archive_folder already exists and means you've built this version before!"
       exit 1
     fi
-    mkdir -p ../../builds && \
+    mkdir -p ${archive_folder} && \
       cp .config ${archive_folder}/config
       cp ../../PKGBUILD ${archive_folder}/PKGBUILD
 }
