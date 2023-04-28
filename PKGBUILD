@@ -115,8 +115,6 @@ _package() {
     install -Dm644 "$srcdir/$linux_vername/$bzimage_path" "$modulesdir/vmlinuz"  
 
     rm -f "$modulesdir"/{source,build}
-
-    cp -r $srcdir/$linux_vername/etc $pkgdir/
 }
 
 _package-headers() {
