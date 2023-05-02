@@ -64,12 +64,12 @@ prepare() {
   echo "-$pkgrel" > localversion.10-pkgrel
   echo "${pkgbase#linux}" > localversion.20-pkgname
 
-  # make defconfig
-  make -s kernelrelease > version
-  make mrproper
-
   echo "Setting config..."
   cp ../../config .config
+
+  make olddefconfig
+  make -s kernelrelease > version
+  make mrproper
 
   local src
   for src in "${source[@]}"; do
@@ -80,8 +80,8 @@ prepare() {
     patch -Np1 < "../$src"
   done
 
-  # make KERNELRELEASE=$(<version) olddefconfig
-  make KERNELRELEASE=$(<version) localmodconfig
+  # yes "" | make KERNELRELEASE=$(<version) olddefconfig
+  yes "" | make KERNELRELEASE=$(<version) localmodconfig
 
   diff -u ../../config .config || :
 
@@ -101,15 +101,9 @@ prepare() {
 build() {
   cd $_srcname || exit
 
-  # set correct version and store
   echo "CFLAGS: $CFLAGS"
   
-  time  (KBUILD_BUILD_TIMESTAM=''
-        make \
-        LLVM=$llvm_path \
-        && V=2 make LLVM=$llvm_path all)
-
-  make -s image_name > bzimage_path
+  time  (KBUILD_BUILD_TIMESTAMP='' V=2 make LLVM=$llvm_path all)
 }
 
 _package() {
