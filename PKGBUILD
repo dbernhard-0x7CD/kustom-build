@@ -4,9 +4,8 @@ pkgver=6.2.12
 pkgdesc="Custom kernel build (kustom build)"
 kustom_build_id=101
 pkgrel="$kustom_build_id"
-linux_vername="linux-$pkgver"
 module_name=$pkgver-$(echo $pkgbase | cut -d "-" -f 2-)
-extraversion=$(echo $pkgbase | cut -d "-" -f 2-)
+_srcname="linux-$pkgver"
 
 # update using: https://github.com/archlinux/svntogit-packages/tree/packages/linux/trunk
 _linux_pkg_commit="1f2e6b4063bd9740021d9554055ccbcd41b72131"
@@ -31,7 +30,7 @@ options=('!strip')
 install=
 changelog=
 source=(
-  "https://cdn.kernel.org/pub/linux/kernel/v6.x/$linux_vername.tar.xz"
+  "https://cdn.kernel.org/pub/linux/kernel/v6.x/$_srcname.tar.xz"
   "https://raw.githubusercontent.com/archlinux/svntogit-packages/$_linux_pkg_commit/repos/core-x86_64/config"
 )
 noextract=()
@@ -39,93 +38,130 @@ sha256sums=('c7e146b52737adfa4c724bfa41bf4721c5ee3cf220c074fbc60eb3ea62b0ccc8'
             'c8b3fbb7664801bebc2d2d1fdf624524865a7817d0021c55c98523cb58dee201')
 validpgpkeys=()
 
-llvm_path="/mnt/Data/llvm/build/bin/"
+llvm_path="1"
 
 CFLAGS=""
-CFLAGS="$CFLAGS -O3"
-CFLAGS="$CFLAGS -mllvm -polly"
-CFLAGS="$CFLAGS -march=native"
+# CFLAGS="$CFLAGS -O3"
+# CFLAGS="$CFLAGS -mllvm -polly"
+# CFLAGS="$CFLAGS -march=native"
 
 info="CFLAGS:$CFLAGS"
-if [ -n "$custom_build_id" ]; then
-  info="$info\n,build id: $kustom_build_id"
+if [ -n "$kustom_build_id" ]; then
+  info="$info,build id: $kustom_build_id"
 fi
 
-export KBUILD_BUILD_HOST="$info"
+export KCFLAGS="$CFLAGS"
 export KBUILD_BUILD_USER="$pkgbase"
+export KBUILD_BUILD_HOST="$info"
 export KBUILD_BUILD_TIMESTAMP="$(date -Ru${SOURCE_DATE_EPOCH:+d @$SOURCE_DATE_EPOCH})"
 
 prepare() {
-    echo "Preparing in $(pwd)"
+  echo "Preparing in $(pwd)"
 
-    cd $linux_vername || echo "unable to find $linux_vername" || exit
+  cd $_srcname || echo "unable to find $_srcname" || exit
 
-    # config comes from archlinux
-    cp ../../config .config
-    
-    yes "" | LLVM=$llvm_path make olddefconfig
-    # yes "" | LLVM=$llvm_path make localmodconfig
-    
-    diff -u ../../config .config || :
+  echo "Setting version..."
+  echo "-$pkgrel" > localversion.10-pkgrel
+  echo "${pkgbase#linux}" > localversion.20-pkgname
 
-    # Copy actual config away
-    archive_folder="../../builds/${kustom_build_id}/"
-    if [ -d "$archive_folder" ]; then
-      echo "$archive_folder already exists and means you've built this version before!"
-      exit 1
-    fi
-    mkdir -p ${archive_folder} && \
-      cp .config ${archive_folder}/config
-      cp ../../PKGBUILD ${archive_folder}/PKGBUILD
+  # make defconfig
+  make -s kernelrelease > version
+  make mrproper
+
+  echo "Setting config..."
+  cp ../../config .config
+
+  local src
+  for src in "${source[@]}"; do
+    src="${src%%::*}"
+    src="${src##*/}"
+    [[ $src = *.patch ]] || continue
+    echo "Applying patch $src..."
+    patch -Np1 < "../$src"
+  done
+
+  # make KERNELRELEASE=$(<version) olddefconfig
+  make KERNELRELEASE=$(<version) localmodconfig
+
+  diff -u ../../config .config || :
+
+  # Copy actual config away
+  archive_folder="../../builds/${kustom_build_id}/"
+  if [ -d "$archive_folder" ]; then
+    echo "$archive_folder already exists and means you've built this version before!"
+    exit 1
+  fi
+  mkdir -p ${archive_folder} && \
+    cp .config ${archive_folder}/config
+    cp ../../PKGBUILD ${archive_folder}/PKGBUILD
+
+  echo "Prepared $pkgbase version $(<version)"
 }
 
 build() {
-    cd $linux_vername || exit
+  cd $_srcname || exit
 
-    # set correct version and store
-    echo "extraversion: $extraversion"
-    sed -i "s/EXTRAVERSION = *$/EXTRAVERSION = -$extraversion/g" Makefile 
-    
-    echo "CFLAGS: $CFLAGS"
-    
-    time (yes "" | KBUILD_BUILD_TIMESTAM='' V=2 make \
-          LLVM=$llvm_path \
-          KCFLAGS="$CFLAGS" \
-          && V=2 make LLVM=$llvm_path bzImage)
+  # set correct version and store
+  echo "CFLAGS: $CFLAGS"
+  
+  time  (KBUILD_BUILD_TIMESTAM=''
+        make \
+        LLVM=$llvm_path \
+        && V=2 make LLVM=$llvm_path all)
 
-    make -s image_name > bzimage_path
+  make -s image_name > bzimage_path
 }
 
 _package() {
-    depends=(coreutils kmod initramfs)
-    optdepends=('crda: to set the correct wireless channels of your country'
-                'linux-firmware: firmware images needed for some devices')
-    provides=(VIRTUALBOX-GUEST-MODULES WIREGUARD-MODULE)
-    replaces=(virtualbox-guest-modules-arch wireguard-arch)
+  pkgdesc="The $pkgdesc kernel and modules"
+  depends=(
+    coreutils
+    initramfs
+    kmod
+  )
+  optdepends=(
+    'wireless-regdb: to set the correct wireless channels of your country'
+    'linux-firmware: firmware images needed for some devices'
+  )
+  provides=(
+    KSMBD-MODULE
+    VIRTUALBOX-GUEST-MODULES
+    WIREGUARD-MODULE
+  )
+  replaces=(
+    virtualbox-guest-modules-arch
+    wireguard-arch
+  )
 
-    bzimage_path=$(<$srcdir/$linux_vername/bzimage_path)
+  cd $_srcname
+  local modulesdir="$pkgdir/usr/lib/modules/$(<version)"
 
-    cd $linux_vername || exit
-    modulesdir="$pkgdir/usr/lib/modules/$module_name"
-    
-    echo "$pkgname" | install -Dm644 /dev/stdin "$modulesdir/pkgbase"
-    
-    make INSTALL_MOD_PATH="$pkgdir/usr"  LLVM=$llvm_path INSTALL_MOD_STRIP=1 modules_install > /dev/null
+  echo "Installing boot image..."
+  # systemd expects to find the kernel here to allow hibernation
+  # https://github.com/systemd/systemd/commit/edda44605f06a41fb86b7ab8128dcf99161d2344
+  install -Dm644 "$(make KERNELRELEASE=$(<version) -s image_name)" "$modulesdir/vmlinuz"
 
-    install -Dm644 "$srcdir/$linux_vername/$bzimage_path" "$modulesdir/vmlinuz"  
+  # Used by mkinitcpio to name the kernel
+  echo "$pkgbase" | install -Dm644 /dev/stdin "$modulesdir/pkgbase"
 
-    rm -f "$modulesdir"/{source,build}
+  echo "Installing modules..."
+  make KERNELRELEASE=$(<version) INSTALL_MOD_PATH="$pkgdir/usr" INSTALL_MOD_STRIP=1 \
+    DEPMOD=/doesnt/exist modules_install  # Suppress depmod
+
+  # remove build and source links
+  rm "$modulesdir"/{source,build}
 }
 
 _package-headers() {
   pkgdesc="Headers and scripts for building modules for the $pkgdesc kernel"
   depends=(pahole)
 
-  cd $linux_vername
-  local builddir="$pkgdir/usr/lib/modules/$pkgbase/build"
+  cd $_srcname
+  local builddir="$pkgdir/usr/lib/modules/$(<version)/build"
 
   echo "Installing build files..."
-  install -Dt "$builddir" -m644 .config Makefile Module.symvers System.map vmlinux
+  install -Dt "$builddir" -m644 .config Makefile Module.symvers System.map \
+    localversion.* version vmlinux
   install -Dt "$builddir/kernel" -m644 kernel/Makefile
   install -Dt "$builddir/arch/x86" -m644 arch/x86/Makefile
   cp -t "$builddir" -a scripts
@@ -178,7 +214,7 @@ _package-headers() {
   echo "Stripping build tools..."
   local file
   while read -rd '' file; do
-    case "$(file -bi "$file")" in
+    case "$(file -Sib "$file")" in
       application/x-sharedlib\;*)      # Libraries (.so)
         strip -v $STRIP_SHARED "$file" ;;
       application/x-archive\;*)        # Libraries (.a)
@@ -198,7 +234,30 @@ _package-headers() {
   ln -sr "$builddir" "$pkgdir/usr/src/$pkgbase"
 }
 
-pkgname=("$pkgbase" "$pkgbase-headers")
+_package-docs() {
+  pkgdesc="Documentation for the $pkgdesc kernel"
+
+  cd $_srcname
+  local builddir="$pkgdir/usr/lib/modules/$(<version)/build"
+
+  echo "Installing documentation..."
+  local src dst
+  while read -rd '' src; do
+    dst="${src#Documentation/}"
+    dst="$builddir/Documentation/${dst#output/}"
+    install -Dm644 "$src" "$dst"
+  done < <(find Documentation -name '.*' -prune -o ! -type d -print0)
+
+  echo "Adding symlink..."
+  mkdir -p "$pkgdir/usr/share/doc"
+  ln -sr "$builddir/Documentation" "$pkgdir/usr/share/doc/$pkgbase"
+}
+
+pkgname=(
+  "$pkgbase"
+  "$pkgbase-headers"
+  "$pkgbase-docs"
+)
 for _p in "${pkgname[@]}"; do
   eval "package_$_p() {
     $(declare -f "_package${_p#$pkgbase}")
