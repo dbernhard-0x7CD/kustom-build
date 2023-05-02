@@ -38,6 +38,7 @@ sha256sums=('c7e146b52737adfa4c724bfa41bf4721c5ee3cf220c074fbc60eb3ea62b0ccc8'
             'c8b3fbb7664801bebc2d2d1fdf624524865a7817d0021c55c98523cb58dee201')
 validpgpkeys=()
 
+# Unset this to use gcc
 llvm_path="1"
 
 CFLAGS=""
