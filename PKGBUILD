@@ -69,10 +69,6 @@ prepare() {
   echo "Setting config..."
   cp ../../config .config
 
-  make olddefconfig
-  make -s kernelrelease > version
-  make mrproper
-
   local src
   for src in "${source[@]}"; do
     src="${src%%::*}"
@@ -84,6 +80,8 @@ prepare() {
 
   # yes "" | make LLVM=$llvm_path KERNELRELEASE=$(<version) olddefconfig
   yes "" | make LLVM=$llvm_path KERNELRELEASE=$(<version) olddefconfig
+
+  make -s kernelrelease > version
 
   diff -u ../../config .config || :
 
