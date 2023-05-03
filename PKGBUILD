@@ -2,7 +2,7 @@
 pkgbase=linux-kb
 pkgver=6.2.13
 pkgdesc="Custom kernel build (kustom build)"
-kustom_build_id=200
+kustom_build_id=201
 pkgrel="$kustom_build_id"
 module_name=$pkgver-$(echo $pkgbase | cut -d "-" -f 2-)
 _srcname="linux-$pkgver"
@@ -43,7 +43,7 @@ validpgpkeys=()
 # llvm_path="/home/dbernhard/llvm-project/clang_16_0_2/"
 
 CFLAGS=""
-# CFLAGS="$CFLAGS -O3"
+CFLAGS="$CFLAGS -O3"
 # CFLAGS="$CFLAGS -mllvm -polly"
 # CFLAGS="$CFLAGS -march=native"
 
