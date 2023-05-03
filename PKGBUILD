@@ -2,7 +2,7 @@
 pkgbase=linux-kb
 pkgver=6.2.13
 pkgdesc="Custom kernel build (kustom build)"
-kustom_build_id=201
+kustom_build_id=300
 pkgrel="$kustom_build_id"
 module_name=$pkgver-$(echo $pkgbase | cut -d "-" -f 2-)
 _srcname="linux-$pkgver"
@@ -40,10 +40,10 @@ sha256sums=('c7dded14e368834b18bb2ad64af65560d8bcb9d2d6597e0f6ef151fded01e577'
 validpgpkeys=()
 
 # Unset this to use gcc
-# llvm_path="/home/dbernhard/llvm-project/clang_16_0_2/"
+llvm_path="/home/dbernhard/llvm-project/build_16_0_3/bin/"
 
 CFLAGS=""
-CFLAGS="$CFLAGS -O3"
+# CFLAGS="$CFLAGS -O3"
 # CFLAGS="$CFLAGS -mllvm -polly"
 # CFLAGS="$CFLAGS -march=native"
 
