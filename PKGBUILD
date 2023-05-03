@@ -1,12 +1,13 @@
 # Maintainer: David Bernhard <dbernhard@ethz.ch>
 pkgbase=linux-kb
-pkgver=6.2.12
+pkgver=6.2.13
 pkgdesc="Custom kernel build (kustom build)"
-kustom_build_id=101
+kustom_build_id=200
 pkgrel="$kustom_build_id"
 module_name=$pkgver-$(echo $pkgbase | cut -d "-" -f 2-)
 _srcname="linux-$pkgver"
 
+# Configuration file source commit in the archlinux 'linux' package
 # update using: https://github.com/archlinux/svntogit-packages/tree/packages/linux/trunk
 _linux_pkg_commit="1f2e6b4063bd9740021d9554055ccbcd41b72131"
 
@@ -34,12 +35,12 @@ source=(
   "https://raw.githubusercontent.com/archlinux/svntogit-packages/$_linux_pkg_commit/repos/core-x86_64/config"
 )
 noextract=()
-sha256sums=('c7e146b52737adfa4c724bfa41bf4721c5ee3cf220c074fbc60eb3ea62b0ccc8'
+sha256sums=('c7dded14e368834b18bb2ad64af65560d8bcb9d2d6597e0f6ef151fded01e577'
             'c8b3fbb7664801bebc2d2d1fdf624524865a7817d0021c55c98523cb58dee201')
 validpgpkeys=()
 
 # Unset this to use gcc
-llvm_path="1"
+# llvm_path="/home/dbernhard/llvm-project/clang_16_0_2/"
 
 CFLAGS=""
 # CFLAGS="$CFLAGS -O3"
@@ -82,7 +83,7 @@ prepare() {
   done
 
   # yes "" | make LLVM=$llvm_path KERNELRELEASE=$(<version) olddefconfig
-  yes "" | make LLVM=$llvm_path KERNELRELEASE=$(<version) localmodconfig
+  yes "" | make LLVM=$llvm_path KERNELRELEASE=$(<version) olddefconfig
 
   diff -u ../../config .config || :
 
@@ -165,7 +166,8 @@ _package-headers() {
   install -Dt "$builddir/tools/objtool" tools/objtool/objtool
 
   # required when DEBUG_INFO_BTF_MODULES is enabled
-  install -Dt "$builddir/tools/bpf/resolve_btfids" tools/bpf/resolve_btfids/resolve_btfids
+  [[ -x tools/bpf/resolve_btfids/resolve_btfids ]] &&
+    install -Dt "$builddir/tools/bpf/resolve_btfids" tools/bpf/resolve_btfids/resolve_btfids
 
   echo "Installing headers..."
   cp -t "$builddir" -a include
