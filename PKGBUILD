@@ -2,7 +2,7 @@
 pkgbase=linux-kb
 pkgver=6.2.13
 pkgdesc="Custom kernel build (kustom build)"
-kustom_build_id=315
+kustom_build_id=302
 pkgrel="$kustom_build_id"
 module_name=$pkgver-$(echo $pkgbase | cut -d "-" -f 2-)
 _srcname="linux-$pkgver"
@@ -42,9 +42,12 @@ validpgpkeys=()
 # Unset this to use gcc
 llvm_path="/home/dbernhard/llvm-project/build_16_0_2/bin/"
 
+# Values of 'full', 'thin' or 'none' allowed
+llvm_lto="full"
+
 CFLAGS=""
-CFLAGS="$CFLAGS -O3"
-CFLAGS="$CFLAGS -mllvm -polly"
+# CFLAGS="$CFLAGS -O3"
+# CFLAGS="$CFLAGS -mllvm -polly"
 # CFLAGS="$CFLAGS -march=native"
 
 info="CFLAGS:$CFLAGS"
@@ -82,6 +85,13 @@ prepare() {
   yes "" | make LLVM=$llvm_path KERNELRELEASE=$(<version) olddefconfig
 
   make -s kernelrelease > version
+
+  case "$llvm_lto" in
+    thin) scripts/config -e LTO -d LTO_NONE -e LTO_CLANG_THIN;;
+    full) scripts/config -e LTO -d LTO_NONE -e LTO_CLANG_FULL;;
+    none) ;;
+    *) echo -e "Invalid value for \$llvm_lto: $llvm_lto\n"; exit 1;;
+  esac
 
   diff -u ../../config .config || :
 
