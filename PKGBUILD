@@ -2,7 +2,7 @@
 pkgbase=linux-kb
 pkgver=6.2.13
 pkgdesc="Custom kernel build (kustom build)"
-kustom_build_id=312
+kustom_build_id=202
 pkgrel="$kustom_build_id"
 module_name=$pkgver-$(echo $pkgbase | cut -d "-" -f 2-)
 _srcname="linux-$pkgver"
@@ -36,27 +36,43 @@ source=(
 )
 noextract=()
 sha256sums=('c7dded14e368834b18bb2ad64af65560d8bcb9d2d6597e0f6ef151fded01e577'
-            'c8b3fbb7664801bebc2d2d1fdf624524865a7817d0021c55c98523cb58dee201')
+            'c8b3fbb7664801bebc2d2d1fdf624524865a7817d0021c55c98523cb58dee201'
+            'e804451032323d35455552c7c88974baec4cd68b96f3c91b20396cfdb105a82a'
+            'a0d500fc5189815112136fcba9566eb03b67d5262c1a02f44db7992962ae981c')
 validpgpkeys=()
 
 # Unset this to use gcc
-llvm_path="/home/dbernhard/llvm-project/build_16_0_2/bin/"
+# llvm_path="/home/dbernhard/llvm-project/build_16_0_2/bin/"
+# llvm_path="/mnt/Data/llvm-project/build_16_0_2/bin/"
 
 # Values of 'full', 'thin' or 'none' allowed
 llvm_lto="none"
 
+gcc_lto=1
+
 CFLAGS=""
 # CFLAGS="$CFLAGS -O3"
-CFLAGS="$CFLAGS -mllvm -polly"
+# CFLAGS="$CFLAGS -mllvm -polly"
 # CFLAGS="$CFLAGS -march=native"
+
+# End of configuration; Below only functional code
 
 info="CFLAGS:$CFLAGS"
 info+=",llvm_lto: $llvm_lto"
+info+=",gcc_lto: $gcc_lto"
 
 if [ -n "$kustom_build_id" ]; then
   info="$info,build id: $kustom_build_id"
 fi
 
+# Add additional sources based on configuration
+if [[ 1 == $gcc_lto ]]; then
+  _cachyos_repo="https://raw.githubusercontent.com/cachyos/kernel-patches/master/6.2/"
+  source+=("${_cachyos_repo}/misc/gcc-lto/0001-gcc-LTO-support-for-the-kernel.patch"
+           "${_cachyos_repo}/misc/gcc-lto/0002-gcc-lto-no-pie.patch")
+fi
+
+# Configure build environment
 export KCFLAGS="$CFLAGS"
 export KBUILD_BUILD_USER="$pkgbase"
 export KBUILD_BUILD_HOST="$info"
