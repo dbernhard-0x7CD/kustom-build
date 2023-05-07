@@ -51,6 +51,8 @@ CFLAGS="$CFLAGS -mllvm -polly"
 # CFLAGS="$CFLAGS -march=native"
 
 info="CFLAGS:$CFLAGS"
+info+=",llvm_lto: $llvm_lto"
+
 if [ -n "$kustom_build_id" ]; then
   info="$info,build id: $kustom_build_id"
 fi
