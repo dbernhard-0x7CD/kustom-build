@@ -81,7 +81,6 @@ prepare() {
     patch -Np1 < "../$src"
   done
 
-  # yes "" | make LLVM=$llvm_path KERNELRELEASE=$(<version) olddefconfig
   yes "" | make LLVM=$llvm_path KERNELRELEASE=$(<version) olddefconfig
 
   make -s kernelrelease > version
