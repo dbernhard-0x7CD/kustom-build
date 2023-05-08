@@ -36,9 +36,7 @@ source=(
 )
 noextract=()
 sha256sums=('c7dded14e368834b18bb2ad64af65560d8bcb9d2d6597e0f6ef151fded01e577'
-            'c8b3fbb7664801bebc2d2d1fdf624524865a7817d0021c55c98523cb58dee201'
-            'e804451032323d35455552c7c88974baec4cd68b96f3c91b20396cfdb105a82a'
-            'a0d500fc5189815112136fcba9566eb03b67d5262c1a02f44db7992962ae981c')
+            'd3cc4f935ee1794cc1f7bb17a9baaf039eec6791cad4bc6b24a4504953c4c8f8')
 validpgpkeys=()
 
 # Unset this to use gcc
