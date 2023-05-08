@@ -108,6 +108,22 @@ prepare() {
     *) echo -e "Invalid value for \$llvm_lto: $llvm_lto\n"; exit 1;;
   esac
 
+  # (from cachyos): Disable DEBUG, pahole is currently broken with GCC LTO
+  scripts/config -d DEBUG_INFO \
+                 -d DEBUG_INFO_BTF \
+                 -d DEBUG_INFO_DWARF4 \
+                 -d DEBUG_INFO_DWARF5 \
+                 -d PAHOLE_HAS_SPLIT_BTF \
+                 -d DEBUG_INFO_BTF_MODULES \
+                 -d SLUB_DEBUG \
+                 -d PM_DEBUG \
+                 -d PM_ADVANCED_DEBUG \
+                 -d PM_SLEEP_DEBUG \
+                 -d ACPI_DEBUG \
+                 -d SCHED_DEBUG \
+                 -d LATENCYTOP \
+                 -d DEBUG_PREEMPT
+
   diff -u ../../config .config || :
 
   # Copy actual config away
