@@ -4,7 +4,6 @@ pkgver=6.2.13
 pkgdesc="Custom kernel build (kustom build)"
 kustom_build_id=202
 pkgrel="$kustom_build_id"
-module_name=$pkgver-$(echo $pkgbase | cut -d "-" -f 2-)
 _srcname="linux-$pkgver"
 
 # Configuration file source commit in the archlinux 'linux' package
