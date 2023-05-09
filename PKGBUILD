@@ -2,7 +2,7 @@
 pkgbase=linux-kb
 pkgver=6.2.13
 pkgdesc="Custom kernel build (kustom build)"
-kustom_build_id=202
+kustom_build_id=400
 pkgrel="$kustom_build_id"
 _srcname="linux-$pkgver"
 
@@ -45,7 +45,7 @@ validpgpkeys=()
 # Values of 'full', 'thin' or 'none' allowed
 llvm_lto="none"
 
-gcc_lto=1
+gcc_lto=0
 
 CFLAGS=""
 # CFLAGS="$CFLAGS -O3"
