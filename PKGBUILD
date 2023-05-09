@@ -124,6 +124,15 @@ prepare() {
                  -d LATENCYTOP \
                  -d DEBUG_PREEMPT
 
+  # Disable BPF as this breaks the build for gcc with LTO
+  scripts/config -d CONFIG_BPF_JIT
+
+  if [ 1 == "$gcc_lto" ]; then
+    echo "Enabling LTO_GCC"
+    scripts/config -e LTO_GCC \
+		   -d LTO_CP_CLONE
+  fi
+
   diff -u ../../config .config || :
 
   # Copy actual config away
