@@ -2,7 +2,7 @@
 pkgbase=linux-kb
 pkgver=6.2.13
 pkgdesc="Custom kernel build (kustom build)"
-kustom_build_id=401
+kustom_build_id=402
 pkgrel="$kustom_build_id"
 _srcname="linux-$pkgver"
 
@@ -35,7 +35,9 @@ source=(
 )
 noextract=()
 sha256sums=('c7dded14e368834b18bb2ad64af65560d8bcb9d2d6597e0f6ef151fded01e577'
-            'd3cc4f935ee1794cc1f7bb17a9baaf039eec6791cad4bc6b24a4504953c4c8f8')
+            'd3cc4f935ee1794cc1f7bb17a9baaf039eec6791cad4bc6b24a4504953c4c8f8'
+            'e804451032323d35455552c7c88974baec4cd68b96f3c91b20396cfdb105a82a'
+            'a0d500fc5189815112136fcba9566eb03b67d5262c1a02f44db7992962ae981c')
 validpgpkeys=()
 
 # Unset this to use gcc
@@ -45,10 +47,10 @@ validpgpkeys=()
 # Values of 'full', 'thin' or 'none' allowed
 llvm_lto="none"
 
-gcc_lto=0
+gcc_lto=1
 
 CFLAGS=""
-CFLAGS="$CFLAGS -O3"
+# CFLAGS="$CFLAGS -O3"
 # CFLAGS="$CFLAGS -mllvm -polly"
 # CFLAGS="$CFLAGS -march=native"
 
