@@ -2,7 +2,7 @@
 pkgbase=linux-kb
 pkgver=6.2.13
 pkgdesc="Custom kernel build (kustom build)"
-kustom_build_id=500
+kustom_build_id=501
 pkgrel="$kustom_build_id"
 _srcname="linux-$pkgver"
 
@@ -48,7 +48,7 @@ llvm_lto="none"
 gcc_lto=0
 
 CFLAGS=""
-# CFLAGS="$CFLAGS -O3"
+CFLAGS="$CFLAGS -O3"
 # CFLAGS="$CFLAGS -mllvm -polly"
 # CFLAGS="$CFLAGS -march=native -mtune=native"
 
