@@ -47,6 +47,8 @@ llvm_lto="none"
 
 gcc_lto=0
 
+menuconfig=1
+
 CFLAGS=""
 # CFLAGS="$CFLAGS -O3"
 CFLAGS="$CFLAGS -mllvm -polly"
@@ -130,6 +132,10 @@ prepare() {
     echo "Enabling LTO_GCC"
     scripts/config -e LTO_GCC \
 		   -d LTO_CP_CLONE
+  fi
+
+  if [ 1 == $menuconfig ]; then
+    make LLVM=$llvm_path menuconfig
   fi
 
   diff -u ../../config .config || :
