@@ -2,8 +2,7 @@
 pkgbase=linux-kb
 pkgver=6.2.13
 pkgdesc="Custom kernel build (kustom build)"
-kustom_build_id=508
-pkgrel="$kustom_build_id"
+kustom_build_id=520
 _srcname="linux-$pkgver"
 
 # Configuration file source commit in the archlinux 'linux' package
@@ -39,7 +38,7 @@ sha256sums=('c7dded14e368834b18bb2ad64af65560d8bcb9d2d6597e0f6ef151fded01e577'
 validpgpkeys=()
 
 # Unset this to use gcc
-llvm_path="/home/dbernhard/llvm-project/build_16_0_3/bin/"
+llvm_path="/home/david/intel-llvm/build/bin/"
 # llvm_path="/mnt/Data/llvm-project/build_16_0_2/bin/"
 
 # Values of 'full', 'thin' or 'none' allowed
