@@ -2,7 +2,8 @@
 pkgbase=linux-kb
 pkgver=6.2.13
 pkgdesc="Custom kernel build (kustom build)"
-kustom_build_id=520
+kustom_build_id=521
+pkgrel="$kustom_build_id"
 _srcname="linux-$pkgver"
 
 # Configuration file source commit in the archlinux 'linux' package
@@ -49,8 +50,8 @@ gcc_lto=0
 menuconfig=1
 
 CFLAGS=""
-# CFLAGS="$CFLAGS -O3"
-CFLAGS="$CFLAGS -mllvm -polly"
+CFLAGS="$CFLAGS -O3"
+# CFLAGS="$CFLAGS -mllvm -polly"
 # CFLAGS="$CFLAGS -march=native -mtune=native"
 
 # End of configuration; Below only functional code
