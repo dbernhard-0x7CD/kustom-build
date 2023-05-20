@@ -2,7 +2,7 @@
 pkgbase=linux-kb
 pkgver=6.2.13
 pkgdesc="Custom kernel build (kustom build)"
-kustom_build_id=521
+kustom_build_id=499
 pkgrel="$kustom_build_id"
 _srcname="linux-$pkgver"
 
@@ -39,7 +39,7 @@ sha256sums=('c7dded14e368834b18bb2ad64af65560d8bcb9d2d6597e0f6ef151fded01e577'
 validpgpkeys=()
 
 # Unset this to use gcc
-llvm_path="/home/david/intel-llvm/build/bin/"
+# llvm_path="/home/dbernhard/llvm-project/build_16_0_3/bin/"
 # llvm_path="/mnt/Data/llvm-project/build_16_0_2/bin/"
 
 # Values of 'full', 'thin' or 'none' allowed
@@ -47,10 +47,12 @@ llvm_lto="none"
 
 gcc_lto=0
 
-menuconfig=1
+menuconfig=0
+
+profile=1
 
 CFLAGS=""
-CFLAGS="$CFLAGS -O3"
+# CFLAGS="$CFLAGS -O3"
 # CFLAGS="$CFLAGS -mllvm -polly"
 # CFLAGS="$CFLAGS -march=native -mtune=native"
 
@@ -136,6 +138,11 @@ prepare() {
 
   if [ 1 == $menuconfig ]; then
     make LLVM=$llvm_path menuconfig
+  fi
+
+  if [ 1 == $profile ]; then
+    scripts/config -e GCOV_KERNEL \
+                   -e GCOV_PROFILE_ALL
   fi
 
   diff -u ../../config .config || :
