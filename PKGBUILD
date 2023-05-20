@@ -2,7 +2,7 @@
 pkgbase=linux-kb
 pkgver=6.2.13
 pkgdesc="Custom kernel build (kustom build)"
-kustom_build_id=499
+kustom_build_id=498
 pkgrel="$kustom_build_id"
 _srcname="linux-$pkgver"
 
@@ -142,7 +142,10 @@ prepare() {
 
   if [ 1 == $profile ]; then
     scripts/config -e GCOV_KERNEL \
-                   -e GCOV_PROFILE_ALL
+                   -e GCOV_PROFILE_ALL \
+                   -e PROFILE_ANNOTATED_BRANCHES \
+                   -e BRANCH_TRACER \
+                   -d GCOV_PROFILE_FTRACE
   fi
 
   diff -u ../../config .config || :
