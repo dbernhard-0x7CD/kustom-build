@@ -49,7 +49,7 @@ gcc_lto=0
 
 menuconfig=0
 
-profile=1
+profile=0
 
 CFLAGS=""
 # CFLAGS="$CFLAGS -O3"
