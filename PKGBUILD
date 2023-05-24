@@ -50,6 +50,7 @@ gcc_lto=0
 menuconfig=0
 
 profile=0
+use_profile_data=0
 
 is_amd=1
 
@@ -59,6 +60,10 @@ CFLAGS="$CFLAGS -O3"
 # CFLAGS="$CFLAGS -march=native -mtune=native"
 
 # End of configuration; Below only functional code
+
+if [ 1 == $use_profile_data ]; then
+  CFLAGS="$CFLAGS -fprofile-use -fprofile-correction -Wno-error=missing-profile -Wno-error=coverage-mismatch"
+fi
 
 info="CFLAGS:$CFLAGS"
 info+=",llvm_lto: $llvm_lto"
