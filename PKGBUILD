@@ -2,7 +2,7 @@
 pkgbase=linux-kb
 pkgver=6.2.13
 pkgdesc="Custom kernel build (kustom build)"
-kustom_build_id=498
+kustom_build_id=540
 pkgrel="$kustom_build_id"
 _srcname="linux-$pkgver"
 
@@ -40,7 +40,7 @@ validpgpkeys=()
 
 # Unset this to use gcc
 # llvm_path="/home/dbernhard/llvm-project/build_16_0_3/bin/"
-# llvm_path="/mnt/Data/llvm-project/build_16_0_2/bin/"
+llvm_path="/home/dbernhard/aocc-compiler-4.0.0/bin/"
 
 # Values of 'full', 'thin' or 'none' allowed
 llvm_lto="none"
@@ -50,6 +50,8 @@ gcc_lto=0
 menuconfig=0
 
 profile=0
+
+is_amd=1
 
 CFLAGS=""
 # CFLAGS="$CFLAGS -O3"
@@ -146,6 +148,11 @@ prepare() {
                    -e PROFILE_ANNOTATED_BRANCHES \
                    -e BRANCH_TRACER \
                    -d GCOV_PROFILE_FTRACE
+  fi
+
+  # Due to: https://community.amd.com/t5/drivers-software/can-t-compile-linux-kernel-with-aocc-4/m-p/570804/thread-id/166320
+  if [ 1 == $is_amd ]; then
+    scripts/config -d CONFIG_DRM_AMDGPU
   fi
 
   diff -u ../../config .config || :
