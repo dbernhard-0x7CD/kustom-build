@@ -2,7 +2,7 @@
 pkgbase=linux-kb
 pkgver=6.2.13
 pkgdesc="Custom kernel build (kustom build)"
-kustom_build_id=573
+kustom_build_id=574
 pkgrel="$kustom_build_id"
 _srcname="linux-$pkgver"
 
@@ -39,7 +39,7 @@ sha256sums=('e628d65e6af2d67904926cd5017cfb8dafdd0fca9d879aeedcf7aa684d41524c'
 validpgpkeys=()
 
 # Unset this to use gcc
-llvm_path="/home/david/llvm-project/build_11_0_1/bin/"
+llvm_path="/home/david/llvm-project/build_12_0_1/bin/"
 # llvm_path="/home/dbernhard/aocc-compiler-4.0.0/bin/"
 
 # Values of 'full', 'thin' or 'none' allowed
