@@ -1,8 +1,8 @@
 # Maintainer: David Bernhard <dbernhard@ethz.ch>
 pkgbase=linux-kb
-pkgver=5.10.182
+pkgver=6.2.13
 pkgdesc="Custom kernel build (kustom build)"
-kustom_build_id=430
+kustom_build_id=576
 pkgrel="$kustom_build_id"
 _srcname="linux-$pkgver"
 
@@ -30,16 +30,16 @@ options=('!strip')
 install=
 changelog=
 source=(
-  "https://cdn.kernel.org/pub/linux/kernel/v5.x/$_srcname.tar.xz"
+  "https://cdn.kernel.org/pub/linux/kernel/v6.x/$_srcname.tar.xz"
   "https://raw.githubusercontent.com/archlinux/svntogit-packages/$_linux_pkg_commit/repos/core-x86_64/config"
 )
 noextract=()
-sha256sums=('de8ec58929460e3a14c1b0502f4a449f24c988a7a4a03ff04a82fb2d665fe9f6'
+sha256sums=('c7dded14e368834b18bb2ad64af65560d8bcb9d2d6597e0f6ef151fded01e577'
             'd3cc4f935ee1794cc1f7bb17a9baaf039eec6791cad4bc6b24a4504953c4c8f8')
 validpgpkeys=()
 
 # Unset this to use gcc
-# llvm_path="/home/david/llvm-project/build_12_0_1/bin/"
+llvm_path="/home/dbernhard/llvm-project/build_14_0_6/bin/"
 # llvm_path="/home/dbernhard/aocc-compiler-4.0.0/bin/"
 
 # Values of 'full', 'thin' or 'none' allowed
