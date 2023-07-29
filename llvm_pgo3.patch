@@ -1,0 +1,88 @@
+From 2035a55750f309be25fefc4e976be14bba4ce32b Mon Sep 17 00:00:00 2001
+From: Bill Wendling <morbo@google.com>
+Date: Mon, 31 May 2021 13:20:44 -0700
+Subject: pgo: rename the raw profile file to vmlinux.profraw
+
+Future PGO features may create other files in /sys/kernel/debug/pgo. So
+rename the kernel's raw profile data file to "vmlinux.profraw" to make
+which part of the kernel the file is for more explicit.
+
+Note that future files in /sys/kernel/debug/pgo should follow a similar
+naming convention.
+
+Signed-off-by: Bill Wendling <morbo@google.com>
+Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+Signed-off-by: Kees Cook <keescook@chromium.org>
+Link: https://lore.kernel.org/r/20210531202044.426578-1-morbo@google.com
+---
+ Documentation/dev-tools/pgo.rst | 6 +++---
+ kernel/pgo/Kconfig              | 7 ++++---
+ kernel/pgo/fs.c                 | 2 +-
+ 3 files changed, 8 insertions(+), 7 deletions(-)
+
+diff --git a/Documentation/dev-tools/pgo.rst b/Documentation/dev-tools/pgo.rst
+index b7f11d8405b73..0200449c4843e 100644
+--- a/Documentation/dev-tools/pgo.rst
++++ b/Documentation/dev-tools/pgo.rst
+@@ -76,7 +76,7 @@ The PGO kernel support creates the following files in debugfs:
+ ``/sys/kernel/debug/pgo/reset``
+ 	Global reset file: resets all coverage data to zero when written to.
+ 
+-``/sys/kernel/debug/profraw``
++``/sys/kernel/debug/pgo/vmlinux.profraw``
+ 	The raw PGO data that must be processed with ``llvm_profdata``.
+ 
+ 
+@@ -108,7 +108,7 @@ using the result to optimize the kernel:
+ 
+    .. code-block:: sh
+ 
+-      $ cp -a /sys/kernel/debug/pgo/profraw /tmp/vmlinux.profraw
++      $ cp -a /sys/kernel/debug/pgo/vmlinux.profraw /tmp/vmlinux.profraw
+ 
+ 5) (Optional) Download the raw profile data to the HOST machine.
+ 
+@@ -120,7 +120,7 @@ using the result to optimize the kernel:
+ 
+    Note that multiple raw profile data files can be merged during this step.
+ 
+-7) Rebuild the kernel using the profile data (PGO disabled)
++7) Rebuild the kernel using the processed profile data (PGO disabled)
+ 
+    .. code-block:: sh
+ 
+diff --git a/kernel/pgo/Kconfig b/kernel/pgo/Kconfig
+index fc9106d6aa9f0..ce7fe04f303d9 100644
+--- a/kernel/pgo/Kconfig
++++ b/kernel/pgo/Kconfig
+@@ -18,10 +18,11 @@ config PGO_CLANG
+ 
+ 	  Run a representative workload for your application on a kernel
+ 	  compiled with this option and download the raw profile file from
+-	  /sys/kernel/debug/pgo/profraw. This file needs to be processed with
+-	  llvm-profdata. It may be merged with other collected raw profiles.
++	  /sys/kernel/debug/pgo/vmlinux.profraw. This file needs to be
++	  processed with llvm-profdata. It may be merged with other collected
++	  raw profiles.
+ 
+-	  Copy the resulting profile file into vmlinux.profdata, and enable
++	  Copy the processed profile file into vmlinux.profdata, and enable
+ 	  KCFLAGS=-fprofile-use=vmlinux.profdata to produce an optimized
+ 	  kernel.
+ 
+diff --git a/kernel/pgo/fs.c b/kernel/pgo/fs.c
+index 449f16beb2cfa..ef985159dad36 100644
+--- a/kernel/pgo/fs.c
++++ b/kernel/pgo/fs.c
+@@ -365,7 +365,7 @@ static int __init pgo_init(void)
+ 	if (!directory)
+ 		goto err_remove;
+ 
+-	if (!debugfs_create_file("profraw", 0600, directory, NULL,
++	if (!debugfs_create_file("vmlinux.profraw", 0600, directory, NULL,
+ 				 &prf_fops))
+ 		goto err_remove;
+ 
+-- 
+cgit 
+

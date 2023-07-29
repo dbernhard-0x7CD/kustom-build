@@ -1,7 +1,8 @@
 # Maintainer: David Bernhard <dbernhard@ethz.ch>
 pkgbase=linux-kb
 pkgver=6.2.13
-kustom_build_id=419
+pkgdesc="Custom kernel build (kustom build)"
+kustom_build_id=518
 pkgrel="$kustom_build_id"
 _srcname="linux-$pkgver"
 
@@ -34,29 +35,31 @@ source=(
 )
 noextract=()
 sha256sums=('c7dded14e368834b18bb2ad64af65560d8bcb9d2d6597e0f6ef151fded01e577'
-            'd3cc4f935ee1794cc1f7bb17a9baaf039eec6791cad4bc6b24a4504953c4c8f8'
-            'e804451032323d35455552c7c88974baec4cd68b96f3c91b20396cfdb105a82a'
-            'a0d500fc5189815112136fcba9566eb03b67d5262c1a02f44db7992962ae981c')
+            'd3cc4f935ee1794cc1f7bb17a9baaf039eec6791cad4bc6b24a4504953c4c8f8')
 validpgpkeys=()
 
 # Unset this to use gcc
-# llvm_path="/home/dbernhard/llvm-project/build_14_0_6/bin/"
+# llvm_path="/home/dbernhard/llvm-project/build_16_0_3/bin/"
+llvm_path="/home/dbernhard/llvm-project/build_pgo/bin/"
 # llvm_path="/home/dbernhard/aocc-compiler-4.0.0/bin/"
 
 # Values of 'full', 'thin' or 'none' allowed
 llvm_lto="none"
 
-gcc_lto=1
+gcc_lto=0
 
 menuconfig=0
 
-profile=1
+profile=0
 use_profile_data=0
+
+profile_llvm=1
+use_profile_llvm=0
 
 is_amd=0
 
 CFLAGS=""
-CFLAGS="$CFLAGS -O3"
+# CFLAGS="$CFLAGS -O3"
 # CFLAGS="$CFLAGS -mllvm -polly"
 # CFLAGS="$CFLAGS -march=native -mtune=native"
 
@@ -154,6 +157,26 @@ prepare() {
                    -e PROFILE_ANNOTATED_BRANCHES \
                    -e BRANCH_TRACER \
                    -d GCOV_PROFILE_FTRACE
+  fi
+
+  if [ 1 == $profile_llvm ]; then
+    echo " applying pgo1"
+    patch -Np1 -f < ../../llvm_pgo.patch
+    echo " applying pgo2"
+    patch -Np1 -f < ../../llvm_pgo2.patch
+    echo " applying pgo3"
+    patch -Np1 -f < ../../llvm_pgo3.patch
+    echo " applying pgo4"
+    patch -Np1 -f < ../../llvm_pgo4.patch
+    echo " applying pgo5"
+    patch -Np1 -f < ../../llvm_pgo5.patch
+    echo " applying pgo6"
+    patch -Np1 -f < ../../llvm_pgo6.patch
+
+    scripts/config -e DEBUG_FS \
+                   -e PGO_CLANG
+    echo "Finished setting config: $?"
+
   fi
 
   # Due to: https://community.amd.com/t5/drivers-software/can-t-compile-linux-kernel-with-aocc-4/m-p/570804/thread-id/166320

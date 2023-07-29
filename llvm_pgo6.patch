@@ -1,0 +1,125 @@
+From 786997ff5b62d5b369708e01b1d70c9c70fff1da Mon Sep 17 00:00:00 2001
+From: Kees Cook <keescook@chromium.org>
+Date: Mon, 7 Jun 2021 15:59:43 -0700
+Subject: pgo: Clean up prf_open() error paths
+
+Change coding style for prf_open() error handling paths. Additionally
+fix up comments to be complete sentences with punctuation.
+
+Cc: Sami Tolvanen <samitolvanen@google.com>
+Cc: Bill Wendling <wcw@google.com>
+Cc: Nathan Chancellor <nathan@kernel.org>
+Cc: Nick Desaulniers <ndesaulniers@google.com>
+Cc: clang-built-linux@googlegroups.com
+Signed-off-by: Kees Cook <keescook@chromium.org>
+---
+ kernel/pgo/fs.c | 49 ++++++++++++++++++++-----------------------------
+ 1 file changed, 20 insertions(+), 29 deletions(-)
+
+diff --git a/kernel/pgo/fs.c b/kernel/pgo/fs.c
+index 0ce0dc9caf7a7..3c5aa7c2a4cef 100644
+--- a/kernel/pgo/fs.c
++++ b/kernel/pgo/fs.c
+@@ -234,17 +234,14 @@ static unsigned long prf_buffer_size(void)
+  */
+ static int prf_serialize(struct prf_private_data *p, size_t buf_size)
+ {
+-	int err = 0;
+ 	void *buffer;
+ 
+ 	/* get buffer size, again. */
+ 	p->size = prf_buffer_size();
+ 
+ 	/* check for unlikely overflow. */
+-	if (p->size > buf_size) {
+-		err = -EAGAIN;
+-		goto out;
+-	}
++	if (p->size > buf_size)
++		return -EAGAIN;
+ 
+ 	buffer = p->buffer;
+ 
+@@ -256,8 +253,7 @@ static int prf_serialize(struct prf_private_data *p, size_t buf_size)
+ 
+ 	prf_serialize_values(&buffer);
+ 
+-out:
+-	return err;
++	return 0;
+ }
+ 
+ /* open() implementation for PGO. Creates a copy of the profiling data set. */
+@@ -266,52 +262,47 @@ static int prf_open(struct inode *inode, struct file *file)
+ 	struct prf_private_data *data;
+ 	unsigned long flags;
+ 	size_t buf_size;
+-	int err = 0;
++	int err = -EINVAL;
+ 
+ 	data = kzalloc(sizeof(*data), GFP_KERNEL);
+-	if (!data) {
+-		err = -ENOMEM;
+-		goto out_free;
+-	}
++	if (!data)
++		return -ENOMEM;
+ 
+-	/* get initial buffer size */
++	/* Get initial buffer size. */
+ 	flags = prf_lock();
+ 	data->size = prf_buffer_size();
+ 	prf_unlock(flags);
+ 
+ 	do {
+-		if (data->buffer)
+-			vfree(data->buffer);
++		vfree(data->buffer);
+ 
+-		/* allocate, round up to page size. */
++		/* Allocate, round up to page size. */
+ 		buf_size = PAGE_ALIGN(data->size);
+ 		data->buffer = vzalloc(buf_size);
+ 
+ 		if (!data->buffer) {
+ 			err = -ENOMEM;
+-			goto out_free;
++			break;
+ 		}
+ 
+ 		/*
+-		 * try serialize and get actual
+-		 * data length in data->size
++		 * Try serialize and get actual
++		 * data length in data->size.
+ 		 */
+ 		flags = prf_lock();
+ 		err = prf_serialize(data, buf_size);
+ 		prf_unlock(flags);
+-		/* in unlikely case, try again. */
++		/* In unlikely case, try again. */
+ 	} while (err == -EAGAIN);
+ 
+-	if (err)
+-		goto out_free;
+-
+-	file->private_data = data;
+-	return 0;
++	if (err < 0) {
++		if (data)
++			vfree(data->buffer);
++		kfree(data);
++	} else {
++		file->private_data = data;
++	}
+ 
+-out_free:
+-	if (data)
+-		vfree(data->buffer);
+-	kfree(data);
+ 	return err;
+ }
+ 
+-- 
+cgit 
+
