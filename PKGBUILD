@@ -2,7 +2,7 @@
 pkgbase=linux-kb
 pkgver=6.2.13
 pkgdesc="Custom kernel build (kustom build)"
-kustom_build_id=518
+kustom_build_id=503
 pkgrel="$kustom_build_id"
 _srcname="linux-$pkgver"
 
@@ -53,8 +53,8 @@ menuconfig=0
 profile=0
 use_profile_data=0
 
-profile_llvm=1
-use_profile_llvm=0
+profile_llvm=0
+use_profile_llvm=1
 
 is_amd=0
 
@@ -68,6 +68,11 @@ CFLAGS=""
 if [ 1 == $use_profile_data ]; then
   CFLAGS="$CFLAGS -fprofile-use -fprofile-correction -Wno-error=missing-profile -Wno-error=coverage-mismatch"
 fi
+
+if [ 1 == $use_profile_llvm ]; then
+  CFLAGS="$CFLAGS -fprofile-use=vmlinux.profdata"
+fi
+
 
 info="CFLAGS:$CFLAGS"
 info+=",llvm_lto: $llvm_lto"
@@ -176,7 +181,10 @@ prepare() {
     scripts/config -e DEBUG_FS \
                    -e PGO_CLANG
     echo "Finished setting config: $?"
+  fi
 
+  if [ 1 == $use_profile_llvm ]; then
+     cp ../../vmlinux.profdata .
   fi
 
   # Due to: https://community.amd.com/t5/drivers-software/can-t-compile-linux-kernel-with-aocc-4/m-p/570804/thread-id/166320
