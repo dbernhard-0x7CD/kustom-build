@@ -2,7 +2,7 @@
 pkgbase=linux-kb
 pkgver=6.2.13
 pkgdesc="Custom kernel build (kustom build)"
-kustom_build_id=503
+kustom_build_id=510
 pkgrel="$kustom_build_id"
 _srcname="linux-$pkgver"
 
@@ -54,7 +54,7 @@ profile=0
 use_profile_data=0
 
 profile_llvm=0
-use_profile_llvm=1
+use_profile_llvm=0
 
 is_amd=0
 
