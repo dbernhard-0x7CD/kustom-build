@@ -1,0 +1,303 @@
+[15:07:53] Configuring KUnit Kernel ...
+Generating .config ...
+Populating config with:
+$ make ARCH=um O=.kunit olddefconfig
+[15:07:55] Building KUnit Kernel ...
+Populating config with:
+$ make ARCH=um O=.kunit olddefconfig
+Building with:
+$ make ARCH=um O=.kunit --jobs=32
+/usr/bin/ld: warning: .tmp_vmlinux.kallsyms1 has a LOAD segment with RWX permissions
+/usr/bin/ld: warning: .tmp_vmlinux.kallsyms2 has a LOAD segment with RWX permissions
+/usr/bin/ld: warning: vmlinux has a LOAD segment with RWX permissions
+
+[15:08:04] Starting KUnit Kernel (1/1)...
+[15:08:04] ============================================================
+[15:08:04] =============== time_test_cases (1 subtest) ================
+[15:08:04] [PASSED] time64_to_tm_test_date_range
+[15:08:04] ================= [PASSED] time_test_cases =================
+[15:08:04] ================== resource (2 subtests) ===================
+[15:08:04] [PASSED] resource_test_union
+[15:08:04] [PASSED] resource_test_intersection
+[15:08:04] ==================== [PASSED] resource =====================
+[15:08:04] ================ sysctl_test (10 subtests) =================
+[15:08:04] [PASSED] sysctl_test_api_dointvec_null_tbl_data
+[15:08:04] [PASSED] sysctl_test_api_dointvec_table_maxlen_unset
+[15:08:04] [PASSED] sysctl_test_api_dointvec_table_len_is_zero
+[15:08:04] [PASSED] sysctl_test_api_dointvec_table_read_but_position_set
+[15:08:04] [PASSED] sysctl_test_dointvec_read_happy_single_positive
+[15:08:04] [PASSED] sysctl_test_dointvec_read_happy_single_negative
+[15:08:04] [PASSED] sysctl_test_dointvec_write_happy_single_positive
+[15:08:04] [PASSED] sysctl_test_dointvec_write_happy_single_negative
+[15:08:04] [PASSED] sysctl_test_api_dointvec_write_single_less_int_min
+[15:08:04] [PASSED] sysctl_test_api_dointvec_write_single_greater_int_max
+[15:08:04] =================== [PASSED] sysctl_test ===================
+[15:08:04] ================== binfmt_elf (1 subtest) ==================
+[15:08:04] [PASSED] total_mapping_size_test
+[15:08:04] =================== [PASSED] binfmt_elf ====================
+[15:08:04] =================== cpumask (6 subtests) ===================
+[15:08:04] [PASSED] test_cpumask_weight
+[15:08:04] [PASSED] test_cpumask_first
+[15:08:04] [PASSED] test_cpumask_last
+[15:08:04] [PASSED] test_cpumask_next
+[15:08:04] [PASSED] test_cpumask_iterators
+[15:08:04] [PASSED] test_cpumask_iterators_builtin
+[15:08:04] ===================== [PASSED] cpumask =====================
+[15:08:04] ==================== hash (2 subtests) =====================
+[15:08:04] [PASSED] test_string_or
+[15:08:04] [PASSED] test_hash_or
+[15:08:04] ====================== [PASSED] hash =======================
+[15:08:04] ================== list_sort (1 subtest) ===================
+[15:08:04] [PASSED] list_sort_test
+[15:08:04] ==================== [PASSED] list_sort ====================
+[15:08:04] =================== lib_sort (1 subtest) ===================
+[15:08:04] [PASSED] test_sort
+[15:08:04] ==================== [PASSED] lib_sort =====================
+[15:08:04] ============= kunit_executor_test (4 subtests) =============
+[15:08:04] [PASSED] parse_filter_test
+[15:08:04] [PASSED] filter_suites_test
+[15:08:04] [PASSED] filter_suites_test_glob_test
+[15:08:04] [PASSED] filter_suites_to_empty_test
+[15:08:04] =============== [PASSED] kunit_executor_test ===============
+[15:08:04] ============ kunit-try-catch-test (2 subtests) =============
+[15:08:04] [PASSED] kunit_test_try_catch_successful_try_no_catch
+[15:08:04] [PASSED] kunit_test_try_catch_unsuccessful_try_does_catch
+[15:08:04] ============== [PASSED] kunit-try-catch-test ===============
+[15:08:04] ============= kunit-resource-test (8 subtests) =============
+[15:08:04] [PASSED] kunit_resource_test_init_resources
+[15:08:04] [PASSED] kunit_resource_test_alloc_resource
+[15:08:04] [PASSED] kunit_resource_test_destroy_resource
+[15:08:04] [PASSED] kunit_resource_test_remove_resource
+[15:08:04] [PASSED] kunit_resource_test_cleanup_resources
+[15:08:04] [PASSED] kunit_resource_test_proper_free_ordering
+[15:08:04] [PASSED] kunit_resource_test_static
+[15:08:04] [PASSED] kunit_resource_test_named
+[15:08:04] =============== [PASSED] kunit-resource-test ===============
+[15:08:04] ================ kunit-log-test (1 subtest) ================
+[15:08:04] [PASSED] kunit_log_test
+[15:08:04] ================= [PASSED] kunit-log-test ==================
+[15:08:04] ================ kunit_status (2 subtests) =================
+[15:08:04] [PASSED] kunit_status_set_failure_test
+[15:08:04] [PASSED] kunit_status_mark_skipped_test
+[15:08:04] ================== [PASSED] kunit_status ===================
+[15:08:04] ============= string-stream-test (3 subtests) ==============
+[15:08:04] [PASSED] string_stream_test_empty_on_creation
+[15:08:04] [PASSED] string_stream_test_not_empty_after_add
+[15:08:04] [PASSED] string_stream_test_get_string
+[15:08:04] =============== [PASSED] string-stream-test ================
+[15:08:04] =================== example (4 subtests) ===================
+[15:08:04] [PASSED] example_simple_test
+[15:08:04] [SKIPPED] example_skip_test
+[15:08:04] [SKIPPED] example_mark_skipped_test
+[15:08:04] [PASSED] example_all_expect_macros_test
+[15:08:04] ===================== [PASSED] example =====================
+[15:08:04] ================== bitfields (2 subtests) ==================
+[15:08:04] [PASSED] test_bitfields_constants
+[15:08:04] [PASSED] test_bitfields_variables
+[15:08:04] ==================== [PASSED] bitfields ====================
+[15:08:04] ============== list-kunit-test (39 subtests) ===============
+[15:08:04] [PASSED] list_test_list_init
+[15:08:04] [PASSED] list_test_list_add
+[15:08:04] [PASSED] list_test_list_add_tail
+[15:08:04] [PASSED] list_test_list_del
+[15:08:04] [PASSED] list_test_list_replace
+[15:08:04] [PASSED] list_test_list_replace_init
+[15:08:04] [PASSED] list_test_list_swap
+[15:08:04] [PASSED] list_test_list_del_init
+[15:08:04] [PASSED] list_test_list_del_init_careful
+[15:08:04] [PASSED] list_test_list_move
+[15:08:04] [PASSED] list_test_list_move_tail
+[15:08:04] [PASSED] list_test_list_bulk_move_tail
+[15:08:04] [PASSED] list_test_list_is_head
+[15:08:04] [PASSED] list_test_list_is_first
+[15:08:04] [PASSED] list_test_list_is_last
+[15:08:04] [PASSED] list_test_list_empty
+[15:08:04] [PASSED] list_test_list_empty_careful
+[15:08:04] [PASSED] list_test_list_rotate_left
+[15:08:04] [PASSED] list_test_list_rotate_to_front
+[15:08:04] [PASSED] list_test_list_is_singular
+[15:08:04] [PASSED] list_test_list_cut_position
+[15:08:04] [PASSED] list_test_list_cut_before
+[15:08:04] [PASSED] list_test_list_splice
+[15:08:04] [PASSED] list_test_list_splice_tail
+[15:08:04] [PASSED] list_test_list_splice_init
+[15:08:04] [PASSED] list_test_list_splice_tail_init
+[15:08:04] [PASSED] list_test_list_entry
+[15:08:04] [PASSED] list_test_list_entry_is_head
+[15:08:04] [PASSED] list_test_list_first_entry
+[15:08:04] [PASSED] list_test_list_last_entry
+[15:08:04] [PASSED] list_test_list_first_entry_or_null
+[15:08:04] [PASSED] list_test_list_next_entry
+[15:08:04] [PASSED] list_test_list_prev_entry
+[15:08:04] [PASSED] list_test_list_for_each
+[15:08:04] [PASSED] list_test_list_for_each_prev
+[15:08:04] [PASSED] list_test_list_for_each_safe
+[15:08:04] [PASSED] list_test_list_for_each_prev_safe
+[15:08:04] [PASSED] list_test_list_for_each_entry
+[15:08:04] [PASSED] list_test_list_for_each_entry_reverse
+[15:08:04] ================= [PASSED] list-kunit-test =================
+[15:08:04] =================== hlist (18 subtests) ====================
+[15:08:04] [PASSED] hlist_test_init
+[15:08:04] [PASSED] hlist_test_unhashed
+[15:08:04] [PASSED] hlist_test_unhashed_lockless
+[15:08:04] [PASSED] hlist_test_del
+[15:08:04] [PASSED] hlist_test_del_init
+[15:08:04] [PASSED] hlist_test_add
+[15:08:04] [PASSED] hlist_test_fake
+[15:08:04] [PASSED] hlist_test_is_singular_node
+[15:08:04] [PASSED] hlist_test_empty
+[15:08:04] [PASSED] hlist_test_move_list
+[15:08:04] [PASSED] hlist_test_entry
+[15:08:04] [PASSED] hlist_test_entry_safe
+[15:08:04] [PASSED] hlist_test_for_each
+[15:08:04] [PASSED] hlist_test_for_each_safe
+[15:08:04] [PASSED] hlist_test_for_each_entry
+[15:08:04] [PASSED] hlist_test_for_each_entry_continue
+[15:08:04] [PASSED] hlist_test_for_each_entry_from
+[15:08:04] [PASSED] hlist_test_for_each_entry_safe
+[15:08:04] ====================== [PASSED] hlist ======================
+[15:08:04] ================== bits-test (3 subtests) ==================
+[15:08:04] [PASSED] genmask_test
+[15:08:04] [PASSED] genmask_ull_test
+[15:08:04] [PASSED] genmask_input_check_test
+[15:08:04] ==================== [PASSED] bits-test ====================
+[15:08:04] =================== cmdline (4 subtests) ===================
+[15:08:04] [PASSED] cmdline_test_noint
+[15:08:04] [PASSED] cmdline_test_lead_int
+[15:08:04] [PASSED] cmdline_test_tail_int
+[15:08:04] [PASSED] cmdline_test_range
+[15:08:04] ===================== [PASSED] cmdline =====================
+[15:08:04] ================== slub_test (6 subtests) ==================
+[15:08:04] [PASSED] test_clobber_zone
+[15:08:04] [PASSED] test_next_pointer
+[15:08:04] [PASSED] test_first_word
+[15:08:04] [PASSED] test_clobber_50th_byte
+[15:08:04] [PASSED] test_clobber_redzone_free
+[15:08:04] [PASSED] test_kmalloc_redzone_access
+[15:08:04] ==================== [PASSED] slub_test ====================
+[15:08:04] =================== memcpy (7 subtests) ====================
+[15:08:04] [PASSED] memset_test
+[15:08:05] [PASSED] memcpy_test
+[15:08:05] [PASSED] memcpy_large_test
+[15:08:05] [PASSED] memmove_test
+[15:08:06] [PASSED] memmove_large_test
+[15:08:06] [PASSED] memmove_overlap_test
+[15:08:06] [PASSED] strtomem_test
+[15:08:06] ===================== [PASSED] memcpy ======================
+[15:08:06] ================ is_signed_type (1 subtest) ================
+[15:08:06] [PASSED] is_signed_type_test
+[15:08:06] ================= [PASSED] is_signed_type ==================
+[15:08:06] ================== overflow (21 subtests) ==================
+[15:08:06] [PASSED] u8_u8__u8_overflow_test
+[15:08:06] [PASSED] s8_s8__s8_overflow_test
+[15:08:06] [PASSED] u16_u16__u16_overflow_test
+[15:08:06] [PASSED] s16_s16__s16_overflow_test
+[15:08:06] [PASSED] u32_u32__u32_overflow_test
+[15:08:06] [PASSED] s32_s32__s32_overflow_test
+[15:08:06] [PASSED] u64_u64__u64_overflow_test
+[15:08:06] [PASSED] s64_s64__s64_overflow_test
+[15:08:06] [PASSED] u32_u32__int_overflow_test
+[15:08:06] [PASSED] u32_u32__u8_overflow_test
+[15:08:06] [PASSED] u8_u8__int_overflow_test
+[15:08:06] [PASSED] int_int__u8_overflow_test
+[15:08:06] [PASSED] shift_sane_test
+[15:08:06] [PASSED] shift_overflow_test
+[15:08:06] [PASSED] shift_truncate_test
+[15:08:06] [PASSED] shift_nonsense_test
+[15:08:06] [PASSED] overflow_allocation_test
+[15:08:06] [PASSED] overflow_size_helpers_test
+[15:08:06] [PASSED] overflows_type_test
+[15:08:06] [PASSED] same_type_test
+[15:08:06] [PASSED] castable_to_type_test
+[15:08:06] ==================== [PASSED] overflow =====================
+[15:08:06] ================= stackinit (65 subtests) ==================
+[15:08:06] [PASSED] test_u8_zero
+[15:08:06] [PASSED] test_u16_zero
+[15:08:06] [PASSED] test_u32_zero
+[15:08:06] [PASSED] test_u64_zero
+[15:08:06] [PASSED] test_char_array_zero
+[15:08:06] [PASSED] test_small_hole_zero
+[15:08:06] [PASSED] test_big_hole_zero
+[15:08:06] [PASSED] test_trailing_hole_zero
+[15:08:06] [PASSED] test_packed_zero
+[15:08:06] [PASSED] test_small_hole_dynamic_partial
+[15:08:06] [PASSED] test_big_hole_dynamic_partial
+[15:08:06] [PASSED] test_trailing_hole_dynamic_partial
+[15:08:06] [PASSED] test_packed_dynamic_partial
+[15:08:06] [PASSED] test_small_hole_assigned_dynamic_partial
+[15:08:06] [PASSED] test_big_hole_assigned_dynamic_partial
+[15:08:06] [PASSED] test_trailing_hole_assigned_dynamic_partial
+[15:08:06] [PASSED] test_packed_assigned_dynamic_partial
+[15:08:06] [PASSED] test_small_hole_static_partial
+[15:08:06] [PASSED] test_big_hole_static_partial
+[15:08:06] [PASSED] test_trailing_hole_static_partial
+[15:08:06] [PASSED] test_packed_static_partial
+[15:08:06] [PASSED] test_small_hole_static_all
+[15:08:06] [PASSED] test_big_hole_static_all
+[15:08:06] [PASSED] test_trailing_hole_static_all
+[15:08:06] [PASSED] test_packed_static_all
+[15:08:06] [PASSED] test_small_hole_dynamic_all
+[15:08:06] [PASSED] test_big_hole_dynamic_all
+[15:08:06] [PASSED] test_trailing_hole_dynamic_all
+[15:08:06] [PASSED] test_packed_dynamic_all
+[15:08:06] [PASSED] test_small_hole_runtime_partial
+[15:08:06] [PASSED] test_big_hole_runtime_partial
+[15:08:06] [PASSED] test_trailing_hole_runtime_partial
+[15:08:06] [PASSED] test_packed_runtime_partial
+[15:08:06] [PASSED] test_small_hole_runtime_all
+[15:08:06] [PASSED] test_big_hole_runtime_all
+[15:08:06] [PASSED] test_trailing_hole_runtime_all
+[15:08:06] [PASSED] test_packed_runtime_all
+[15:08:06] [PASSED] test_small_hole_assigned_static_partial
+[15:08:06] [PASSED] test_big_hole_assigned_static_partial
+[15:08:06] [PASSED] test_trailing_hole_assigned_static_partial
+[15:08:06] [PASSED] test_packed_assigned_static_partial
+[15:08:06] [PASSED] test_small_hole_assigned_static_all
+[15:08:06] [PASSED] test_big_hole_assigned_static_all
+[15:08:06] [PASSED] test_trailing_hole_assigned_static_all
+[15:08:06] [PASSED] test_packed_assigned_static_all
+[15:08:06] [PASSED] test_small_hole_assigned_dynamic_all
+[15:08:06] [PASSED] test_big_hole_assigned_dynamic_all
+[15:08:06] [PASSED] test_trailing_hole_assigned_dynamic_all
+[15:08:06] [PASSED] test_packed_assigned_dynamic_all
+[15:08:06] [SKIPPED] test_small_hole_assigned_copy
+[15:08:06] [SKIPPED] test_big_hole_assigned_copy
+[15:08:06] [SKIPPED] test_trailing_hole_assigned_copy
+[15:08:06] [PASSED] test_packed_assigned_copy
+[15:08:06] [PASSED] test_u8_none
+[15:08:06] [PASSED] test_u16_none
+[15:08:06] [PASSED] test_u32_none
+[15:08:06] [PASSED] test_u64_none
+[15:08:06] [PASSED] test_char_array_none
+[15:08:06] [SKIPPED] test_switch_1_none
+[15:08:06] [SKIPPED] test_switch_2_none
+[15:08:06] [PASSED] test_small_hole_none
+[15:08:06] [PASSED] test_big_hole_none
+[15:08:06] [PASSED] test_trailing_hole_none
+[15:08:06] [PASSED] test_packed_none
+[15:08:06] [PASSED] test_user
+[15:08:06] ==================== [PASSED] stackinit ====================
+[15:08:06] =================== strscpy (1 subtest) ====================
+[15:08:06] [PASSED] strscpy_test
+[15:08:06] ===================== [PASSED] strscpy =====================
+[15:08:06] =================== siphash (1 subtest) ====================
+[15:08:06] [PASSED] siphash_test
+[15:08:06] ===================== [PASSED] siphash =====================
+[15:08:06] =============== qos-kunit-test (3 subtests) ================
+[15:08:06] [PASSED] freq_qos_test_min
+[15:08:06] [PASSED] freq_qos_test_maxdef
+[15:08:06] [PASSED] freq_qos_test_readd
+[15:08:06] ================= [PASSED] qos-kunit-test ==================
+[15:08:06] =============== property-entry (7 subtests) ================
+[15:08:06] [PASSED] pe_test_uints
+[15:08:06] [PASSED] pe_test_uint_arrays
+[15:08:06] [PASSED] pe_test_strings
+[15:08:06] [PASSED] pe_test_bool
+[15:08:06] [PASSED] pe_test_move_inline_u8
+[15:08:06] [PASSED] pe_test_move_inline_str
+[15:08:06] [PASSED] pe_test_reference
+[15:08:06] ================= [PASSED] property-entry ==================
+[15:08:06] ============================================================
+[15:08:06] Testing complete. Ran 226 tests: passed: 219, skipped: 7
+[15:08:06] Elapsed time: 13.052s total, 1.633s configuring, 9.152s building, 2.247s running
+
